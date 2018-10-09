@@ -40,6 +40,15 @@ namespace TPS
         {
             RotateView();
 
+            if (Input.GetMouseButtonDown(0))
+            {
+                int attackID = UnityEngine.Random.Range(0, 2);
+                Debug.Log(attackID);
+                anim.SetInteger("AttackID", attackID);
+                anim.SetTrigger("Attack");
+                
+            }
+
             if (Input.GetButtonDown("Jump") && !m_Jump)
             {
                 m_Jump = true;

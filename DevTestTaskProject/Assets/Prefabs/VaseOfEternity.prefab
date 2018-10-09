@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23895849910610360}
   - component: {fileID: 114497371646294262}
   m_Layer: 0
-  m_Name: Jar2A
+  m_Name: VaseOfEternity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1863924664849700}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: -2.41}
+  m_LocalPosition: {x: 17.236294, y: -4.352358e-18, z: 2.3521533}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

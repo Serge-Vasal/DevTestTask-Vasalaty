@@ -10,6 +10,11 @@ public class VaseOfEternity : MonoBehaviour, IQuestable
         UIManager.Instance.UpdateQuestItemSlots(itemIcon);
     }
 
+    void OnTriggerEnter(Collider collider)
+    {
+        Debug.Log("Trigger");
+    }
+
     void Start () {
 		
 	}

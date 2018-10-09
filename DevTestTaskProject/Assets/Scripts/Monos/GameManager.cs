@@ -9,12 +9,14 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Renderer groundRenderer;
     [SerializeField] private float GroundRandomPointMargin;
     [SerializeField] private float randomPointMinimalDistance;
+    [SerializeField] private GameObject[] SystemPrefabs;
 
     private GameObject playerGO;
     private float randomPointMinimalDistanceSqr;
     private List<GameObject> QuestItemsPassivePool;
     private List<GameObject> QuestItemsActivePool;
     private List<Vector3> randomPointsList;
+    private List<GameObject> instancedSystemPrefabs;
     private Vector3 groundPosition;
     private float groundExtentsX;
     private float groundExtentsZ;
@@ -23,6 +25,8 @@ public class GameManager : Singleton<GameManager>
     protected override void Awake ()
     {
         base.Awake();
+        instancedSystemPrefabs = new List<GameObject>();
+        InstantiateSystemPrefabs();
         randomPointMinimalDistanceSqr = randomPointMinimalDistance * randomPointMinimalDistance;
         groundPosition = groundRenderer.gameObject.transform.position;
         groundExtentsX = groundRenderer.bounds.extents.x;
@@ -34,6 +38,16 @@ public class GameManager : Singleton<GameManager>
         InstantiatePrefabs();
         SetupScene();     
 	}
+
+    void InstantiateSystemPrefabs()
+    {
+        GameObject prefabInstance;
+        for (int i = 0; i < SystemPrefabs.Length; ++i)
+        {
+            prefabInstance = Instantiate(SystemPrefabs[i]);
+            instancedSystemPrefabs.Add(prefabInstance);
+        }
+    }
 
     void InstantiatePrefabs()
     {
