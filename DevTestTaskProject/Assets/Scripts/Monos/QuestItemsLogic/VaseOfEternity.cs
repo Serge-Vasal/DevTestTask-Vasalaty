@@ -1,26 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using TPS;
 
-public class VaseOfEternity : MonoBehaviour, IQuestable
-{
-    [SerializeField] private Sprite itemIcon;
-    public void OnActivated()
+public class VaseOfEternity : QuestItemBaseClass
+{   
+    private void OnTriggerEnter(Collider col)
     {
-        UIManager.Instance.UpdateQuestItemSlots(itemIcon);
-    }
-
-    void OnTriggerEnter(Collider collider)
-    {
-        Debug.Log("Trigger");
-    }
-
-    void Start () {
-		
-	}
-	
-	
-	void Update () {
-		
-	}
+        
+        if (col.gameObject.tag == "Sword" && GameManager.Instance.swordActive)
+        {
+            Debug.Log("Sword active  "+GameManager.Instance.swordActive);
+            
+            GameManager.Instance.CheckQuestItem(gameObject);
+            
+        }
+    }    
 }

@@ -68,7 +68,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1977987471770190}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 21.194698, y: -4.1624933e-17, z: 22.495441}
+  m_LocalPosition: {x: -6.473032, y: 3.139348e-17, z: -16.96604}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4955484968941526}
@@ -167,6 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bd84157058389247a4739801ffa37b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireworksOfHappinessPrefab: {fileID: 1004006627306290, guid: 02f1317fe074a584190fedcd32342ed5,
+    type: 2}
+  cloudOfDispairPrefab: {fileID: 1768634826813254, guid: bd66daa0e53782549854ecf512942015,
+    type: 2}
   itemIcon: {fileID: 21300000, guid: 3e6cd44e6490191428819b36b038e092, type: 3}
   playerLookRotationNull: {fileID: 4955484968941526}
   playerCurrentRotationNull: {fileID: 4381969530265900}

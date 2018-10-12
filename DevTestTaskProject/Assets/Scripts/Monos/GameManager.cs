@@ -9,7 +9,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Renderer groundRenderer;
     [SerializeField] private float GroundRandomPointMargin;
     [SerializeField] private float randomPointMinimalDistance;
-    [SerializeField] private GameObject[] SystemPrefabs;
+    [SerializeField] private GameObject[] SystemPrefabs;    
 
     private GameObject playerGO;
     private float randomPointMinimalDistanceSqr;
@@ -20,7 +20,9 @@ public class GameManager : Singleton<GameManager>
     private Vector3 groundPosition;
     private float groundExtentsX;
     private float groundExtentsZ;
-    private int currentQuestItem=0;
+    private int currentQuestItem=0;    
+
+    public bool swordActive=false;
 
     protected override void Awake ()
     {
@@ -30,7 +32,7 @@ public class GameManager : Singleton<GameManager>
         randomPointMinimalDistanceSqr = randomPointMinimalDistance * randomPointMinimalDistance;
         groundPosition = groundRenderer.gameObject.transform.position;
         groundExtentsX = groundRenderer.bounds.extents.x;
-        groundExtentsZ = groundRenderer.bounds.extents.z;
+        groundExtentsZ = groundRenderer.bounds.extents.z;        
         QuestItemsPassivePool = new List<GameObject>();
         QuestItemsActivePool = new List<GameObject>();
         randomPointsList = new List<Vector3>();
@@ -52,11 +54,13 @@ public class GameManager : Singleton<GameManager>
     void InstantiatePrefabs()
     {
         playerGO = Instantiate(PlayerPrefab);
-        playerGO.SetActive(false);
+        playerGO.SetActive(false);        
 
         for (int i = 0; i < QuestItemPrefabs.Length; i++)
         {
             GameObject obj = (GameObject)Instantiate(QuestItemPrefabs[i]);
+            QuestItemBaseClass questScript = obj.GetComponent<QuestItemBaseClass>();
+            questScript.InstantiateParticles();
             obj.SetActive(false);
             QuestItemsPassivePool.Add(obj);
         }
@@ -74,12 +78,26 @@ public class GameManager : Singleton<GameManager>
             QuestItemsActivePool[i].transform.position = FindRandomPoint();
             QuestItemsActivePool[i].transform.rotation = Quaternion.identity;
             QuestItemsActivePool[i].SetActive(true);
-            QuestItemsActivePool[i].gameObject.GetComponent<IQuestable>().OnActivated();            
-            
+            QuestItemsActivePool[i].gameObject.GetComponent<QuestItemBaseClass>().OnActivated();            
             
             QuestItemsPassivePool.Remove(GO);            
-        }       
-        
+        } 
+    }
+
+    void UnloadScene()
+    {
+        UIManager.Instance.ResetUI();
+        currentQuestItem = 0;
+        randomPointsList.Clear();
+        for (int i = 0; i <= QuestItemsActivePool.Count+1; i++)
+        {            
+            GameObject GO = QuestItemsActivePool[0];
+            QuestItemBaseClass questItemBaseScript = GO.GetComponent<QuestItemBaseClass>();
+            questItemBaseScript.StopAllParticles();
+            questItemBaseScript.DeactivateQuestItem();
+            QuestItemsPassivePool.Add(GO);
+            QuestItemsActivePool.Remove(GO);                    
+        }
     }
 
     private Vector3 FindRandomPoint()
@@ -95,45 +113,67 @@ public class GameManager : Singleton<GameManager>
             groundPosition.z + groundExtentsZ - GroundRandomPointMargin));
 
             if (randomPointsList.Count > 0)
-            {
+            {                
                 for (int i = 0; i < randomPointsList.Count; i++)
-                {
+                {                    
                     if ((randomPoint - randomPointsList[i]).sqrMagnitude < randomPointMinimalDistanceSqr)
-                    {
-                        continue;
+                    {                        
+                        isValidRandomPoint = false;                        
+                        break;
                     }
-                    else
-                    {
-                        isValidRandomPoint = true;
-                        randomPointsList.Add(randomPoint);
-                    }
+                    isValidRandomPoint = true;                                       
                 }
+
+                if (isValidRandomPoint)
+                {                    
+                    randomPointsList.Add(randomPoint);                    
+                    break;
+                }  
             }
             else
             {
-                isValidRandomPoint = true;
-            }
-        }
+                isValidRandomPoint = true;                
+                randomPointsList.Add(randomPoint);                                       
+                break;
+            } 
+        }        
         return randomPoint;
     }
 
     public void CheckQuestItem(GameObject questItem)
     {
+        QuestItemBaseClass thisQuestBaseScript = questItem.GetComponent<QuestItemBaseClass>();        
         if (questItem == QuestItemsActivePool[currentQuestItem])
         {
-            Debug.Log("True");
+            thisQuestBaseScript.isActivatedQuestItem = true;
+            thisQuestBaseScript.ActivateParticles(true, questItem.transform);
             currentQuestItem += 1;
+            if (currentQuestItem == QuestItemsActivePool.Count)
+            {
+                StartCoroutine(QuestFinished());
+            }
         }
         else
         {
-            Debug.Log("False");
+            if (!thisQuestBaseScript.isActivatedQuestItem)
+            {
+                for (int i = 0; i < QuestItemsActivePool.Count; i++)
+                {
+                    QuestItemBaseClass questBaseScript = QuestItemsActivePool[i].GetComponent<QuestItemBaseClass>();
+                    questBaseScript.StopAllParticles();
+                    questBaseScript.DeactivateQuestItem();
+                }
+                thisQuestBaseScript.ActivateParticles(false, questItem.transform);
+                currentQuestItem = 0;
+            }            
         }
     }
-
-    public void UpdateCurrentQuestItem(GameObject questItem)
-    {
-
+    
+    IEnumerator QuestFinished()
+    {        
+        yield return new WaitForSeconds(2);
+        UnloadScene();
+        SetupScene();
     }
-	
 	
 }

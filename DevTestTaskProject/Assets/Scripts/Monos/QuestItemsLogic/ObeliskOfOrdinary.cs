@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObeliskOfOrdinary : MonoBehaviour, IQuestable
-{
-    [SerializeField] private Sprite itemIcon;
+public class ObeliskOfOrdinary : QuestItemBaseClass
+{    
     [SerializeField] private Transform playerLookRotationNull;
     [SerializeField] private Transform playerCurrentRotationNull;
 
@@ -26,22 +25,13 @@ public class ObeliskOfOrdinary : MonoBehaviour, IQuestable
     private bool ok270=false;
     private bool ok360=false;
     
-    private bool isInNegativeZone;
-
-    private void Start()
-    {
-        obeliskPosition = transform.position;
-    }
-
-    public void OnActivated()
-    {
-        UIManager.Instance.UpdateQuestItemSlots(itemIcon);
-    }
+    private bool isInNegativeZone; 
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.tag == "Player")
+        if (collider.gameObject.tag == "Player" && !isPlayerInside)
         {
+            obeliskPosition = transform.position;
             isPlayerInside = true;
             playerTransform = collider.gameObject.transform;
             obeliskToPlayerVector = playerTransform.position - obeliskPosition;  
@@ -58,6 +48,7 @@ public class ObeliskOfOrdinary : MonoBehaviour, IQuestable
         if (collider.gameObject.tag == "Player")
         {
             isPlayerInside = false;
+            StopAllCoroutines();
                         
         }
     }
@@ -122,9 +113,15 @@ public class ObeliskOfOrdinary : MonoBehaviour, IQuestable
 
             if(ok90 && ok90 && ok180 && ok270 && (Mathf.Abs(rotationDeltaFinal) > 355f))
             {
+                StopAllCoroutines();
+                ok0 = false;
+                ok90 = false;
+                ok180 = false;
+                ok270 = false;
+                ok360 = false;
                 GameManager.Instance.CheckQuestItem(gameObject);
-                yield break;
-            }
+                
+}
 
 
             Debug.Log(Mathf.Abs(rotationDeltaFinal));
@@ -132,75 +129,6 @@ public class ObeliskOfOrdinary : MonoBehaviour, IQuestable
             Debug.Log("ok180  "+ok180);
             Debug.Log("ok270  "+ok270);            
             
-
-
-
-
-
-            //if (rotationDeltaCurr.y > 0f )
-            //{
-            //    ok0 = true;
-            //}
-
-
-            //if (rotationDeltaCurr.y > 0f && !ok0)
-            //{
-            //    rotationDeltaFinal = rotationDeltaCurr.y - 360f;
-            //}
-            //if (rotationDeltaCurr.y > 190f && !ok180)
-            //{
-            //    rotationDeltaFinal=rotationDeltaCurr.y - 360f;
-            //}
-            //if (rotationDeltaCurr.y > 100f && !ok90)
-            //else
-            //{
-            //    rotationDeltaFinal = rotationDeltaCurr.y;
-            //}
-
-            //if (Mathf.Abs(rotationDeltaFinal) > 180f)
-            //{
-            //    ok180 = true;               
-            //}
-            //if(ok180 && Mathf.Abs(rotationDeltaFinal) < 180)
-            //{
-            //    ok180 = false;
-            //}
-            //if (Mathf.Abs(rotationDeltaFinal) > 270f)
-            //{
-            //    ok270 = true;               
-            //}
-            //if (ok270 && Mathf.Abs(rotationDeltaFinal) < 270)
-            //{
-            //    ok270 = false;
-            //}
-            //if(ok180 && ok270 && Mathf.Abs(rotationDeltaFinal) > 350f)
-            //{
-            //    GameManager.Instance.CheckQuestItem(gameObject);
-            //    yield break;
-            //}
-
-
-            //if(rotationDelta.y+10f>= 350f)
-            //{
-
-            //}
-            //Debug.Log("Delta  " + rotationDelta);
-
-            //if()
-            //{
-
-
-            //    GameManager.Instance.CheckQuestItem(gameObject);
-            //    yield break;
-            //}
-            //prevAngle= currAngle;
-
-
-            //if ()
-            //{
-
-            //    yield break;
-            //}
             yield return new WaitForFixedUpdate();
         }
     }

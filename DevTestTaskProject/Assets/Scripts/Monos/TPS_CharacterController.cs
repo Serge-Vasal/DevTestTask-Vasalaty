@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using System;
 
 namespace TPS
 {
     public class TPS_CharacterController : MonoBehaviour
-    {       
+    {      
         private Animator anim;
         private Vector2 previousInput;
-
+        
         public Transform cam;
         public Transform groundCheck;        
-        public MouseLook mouseLook = new MouseLook(); 
+        public MouseLook mouseLook = new MouseLook();
+        public bool swordActiveState=false;
         
         
         private float m_YRotation;
@@ -42,12 +44,19 @@ namespace TPS
 
             if (Input.GetMouseButtonDown(0))
             {
-                int attackID = UnityEngine.Random.Range(0, 2);
-                Debug.Log(attackID);
+                int attackID = UnityEngine.Random.Range(0, 2);                
                 anim.SetInteger("AttackID", attackID);
                 anim.SetTrigger("Attack");
-                
             }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                if ((anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_L")) ||
+                   (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack_R")))
+                {  
+                    anim.SetTrigger("AttackStrong");                    
+                }
+            } 
 
             if (Input.GetButtonDown("Jump") && !m_Jump)
             {
@@ -72,16 +81,15 @@ namespace TPS
                 {
                     anim.SetBool("isRunning", false);
                 }            
-                previousInput = input;                         
-
+                previousInput = input; 
             }
             else
             {
                 anim.SetBool("isMoving", false);
                 anim.SetFloat("xInput", input.x);
                 anim.SetFloat("yInput", input.y);
-            }           
-        }    
+            } 
+        }
 
         private Vector2 GetInput()
         {
@@ -101,6 +109,18 @@ namespace TPS
             float oldYRotation = transform.eulerAngles.y;
 
             mouseLook.LookRotation(transform,cam);            
-        } 
+        }
+        
+        public void SwordOn()
+        {
+            GameManager.Instance.swordActive = true;            
+        }
+
+        public void SwordOff()
+        {
+            GameManager.Instance.swordActive = false;
+        }
+
+
     }
 }

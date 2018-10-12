@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SquareOfWorship : MonoBehaviour, IQuestable
-{
-    [SerializeField] private Sprite itemIcon;
+public class SquareOfWorship : QuestItemBaseClass
+{  
     
     private Animator playerAnim;
     private bool isPlayerInside;
@@ -12,15 +11,11 @@ public class SquareOfWorship : MonoBehaviour, IQuestable
     private void Start()
     {
         playerAnim = GameObject.FindWithTag("Player").GetComponent<Animator>();        
-    }
-
-    public void OnActivated()
-    {
-        UIManager.Instance.UpdateQuestItemSlots(itemIcon);   
-    }    
+    } 
 
     void OnTriggerEnter(Collider collider)
-    {        
+    {
+        Debug.Log("Entered");
         if (collider.gameObject.tag == "Player")
         {
             isPlayerInside = true;

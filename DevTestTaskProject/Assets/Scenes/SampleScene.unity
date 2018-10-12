@@ -209,13 +209,14 @@ MonoBehaviour:
   - {fileID: 1977987471770190, guid: 11aa2315791f88241b032a95effe906a, type: 2}
   - {fileID: 1863924664849700, guid: a98a6f1b894849f4892c09ca34f719f7, type: 2}
   - {fileID: 1957637034261896, guid: a7c9db63e7d5090458cc9802422b3d95, type: 2}
-  PlayerPrefab: {fileID: 1372926000858984, guid: e0461571ca13a104aaa022df8f259dec,
+  PlayerPrefab: {fileID: 1743488028740146, guid: c5d4efa025e7f4143a4a30dd1fab21ac,
     type: 2}
   groundRenderer: {fileID: 435052837}
-  GroundRandomPointMargin: 40
+  GroundRandomPointMargin: 50
   randomPointMinimalDistance: 10
   SystemPrefabs:
   - {fileID: 1289171466813848, guid: e44395de45b1e284b8501e0f59ce7151, type: 2}
+  swordActive: 0
 --- !u!4 &251963611
 Transform:
   m_ObjectHideFlags: 0
@@ -223,7 +224,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 251963609}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.31153226, y: 0.995578, z: 0.025642753}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
