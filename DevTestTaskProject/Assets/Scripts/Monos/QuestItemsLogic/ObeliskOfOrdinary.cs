@@ -42,9 +42,7 @@ public class ObeliskOfOrdinary : QuestItemBaseClass
         {
             isPlayerInside = false;
             isInNegativeZone = false;
-            StopAllCoroutines();
-            Debug.Log("exited");
-                        
+            StopAllCoroutines(); 
         }
     }
 
