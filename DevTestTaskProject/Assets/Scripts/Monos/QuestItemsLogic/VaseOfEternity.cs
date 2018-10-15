@@ -7,14 +7,10 @@ using TPS;
 public class VaseOfEternity : QuestItemBaseClass
 {   
     private void OnTriggerEnter(Collider col)
-    {
-        
+    {        
         if (col.gameObject.tag == "Sword" && GameManager.Instance.swordActive)
-        {
-            Debug.Log("Sword active  "+GameManager.Instance.swordActive);
-            
-            GameManager.Instance.CheckQuestItem(gameObject);
-            
+        {            
+            GameManager.Instance.CheckQuestItem(gameObject);            
         }
     }    
 }

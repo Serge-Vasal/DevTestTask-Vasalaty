@@ -1,16 +1,14 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ObeliskOfOrdinary : QuestItemBaseClass
 {    
-    [SerializeField] private Transform playerLookRotationNull;
+    [SerializeField] private Transform playerStartRotationNull;
     [SerializeField] private Transform playerCurrentRotationNull;
 
     private bool isPlayerInside;
     private Transform playerTransform;
     private Quaternion playerStartRotation;
-    private Vector3 playerStartRotationEuler;
     private Quaternion playerCurrentRotation;
     private float currentAngle;
     private Vector3 obeliskToPlayerVector;
@@ -19,11 +17,9 @@ public class ObeliskOfOrdinary : QuestItemBaseClass
     private Vector3 rotationDeltaPrev;
     private float rotationDeltaFinal;
 
-    private bool ok0 = false;
     private bool ok90=false;
     private bool ok180=false;
     private bool ok270=false;
-    private bool ok360=false;
     
     private bool isInNegativeZone; 
 
@@ -36,9 +32,7 @@ public class ObeliskOfOrdinary : QuestItemBaseClass
             playerTransform = collider.gameObject.transform;
             obeliskToPlayerVector = playerTransform.position - obeliskPosition;  
             playerStartRotation = Quaternion.LookRotation(obeliskToPlayerVector, Vector3.up);
-            playerStartRotationEuler = playerStartRotation.eulerAngles;
-            playerLookRotationNull.rotation = playerStartRotation;
-            Debug.Log("Start  "+playerStartRotationEuler);
+            playerStartRotationNull.rotation = playerStartRotation;
             StartCoroutine(CheckPlayerStatus());
         }
     }
@@ -114,21 +108,11 @@ public class ObeliskOfOrdinary : QuestItemBaseClass
             if(ok90 && ok90 && ok180 && ok270 && (Mathf.Abs(rotationDeltaFinal) > 355f))
             {
                 StopAllCoroutines();
-                ok0 = false;
                 ok90 = false;
                 ok180 = false;
-                ok270 = false;
-                ok360 = false;
-                GameManager.Instance.CheckQuestItem(gameObject);
-                
-}
-
-
-            Debug.Log(Mathf.Abs(rotationDeltaFinal));
-            Debug.Log("ok90  " + ok90);
-            Debug.Log("ok180  "+ok180);
-            Debug.Log("ok270  "+ok270);            
-            
+                ok270 = false;                
+                GameManager.Instance.CheckQuestItem(gameObject);  
+                }
             yield return new WaitForFixedUpdate();
         }
     }

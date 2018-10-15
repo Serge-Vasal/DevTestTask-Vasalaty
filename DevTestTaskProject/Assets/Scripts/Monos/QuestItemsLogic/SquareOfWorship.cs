@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SquareOfWorship : QuestItemBaseClass
-{  
-    
+{      
     private Animator playerAnim;
     private bool isPlayerInside;
 
@@ -15,7 +14,6 @@ public class SquareOfWorship : QuestItemBaseClass
 
     void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("Entered");
         if (collider.gameObject.tag == "Player")
         {
             isPlayerInside = true;

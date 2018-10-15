@@ -9,7 +9,6 @@ namespace TPS
     public class TPS_CharacterController : MonoBehaviour
     {      
         private Animator anim;
-        private Vector2 previousInput;
         
         public Transform cam;
         public Transform groundCheck;        
@@ -18,18 +17,7 @@ namespace TPS
         
         
         private float m_YRotation;
-        private Vector3 m_GroundContactNormal;
-        private bool m_Jump, m_PreviouslyGrounded, m_Jumping, m_IsGrounded;
-
-        public bool Grounded
-        {
-            get { return m_IsGrounded; }
-        }
-
-        public bool Jumping
-        {
-            get { return m_Jumping; }
-        }
+        private Vector3 m_GroundContactNormal;  
 
         void Start()
         {           
@@ -57,11 +45,6 @@ namespace TPS
                     anim.SetTrigger("AttackStrong");                    
                 }
             } 
-
-            if (Input.GetButtonDown("Jump") && !m_Jump)
-            {
-                m_Jump = true;
-            }
         }
 
         private void FixedUpdate()
@@ -80,8 +63,7 @@ namespace TPS
                 else
                 {
                     anim.SetBool("isRunning", false);
-                }            
-                previousInput = input; 
+                } 
             }
             else
             {
@@ -104,9 +86,7 @@ namespace TPS
         private void RotateView()
         {
             if (Mathf.Abs(Time.timeScale) < float.Epsilon)
-                return;
-
-            float oldYRotation = transform.eulerAngles.y;
+                return;            
 
             mouseLook.LookRotation(transform,cam);            
         }
@@ -120,7 +100,5 @@ namespace TPS
         {
             GameManager.Instance.swordActive = false;
         }
-
-
     }
 }
