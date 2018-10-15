@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    [SerializeField] private GameObject[] QuestItemPrefabs;
-    [SerializeField] private GameObject PlayerPrefab;
+    [SerializeField] private GameObject[] questItemPrefabs;
+    [SerializeField] private GameObject[] systemPrefabs;
+    [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Renderer groundRenderer;
-    [SerializeField] private float GroundRandomPointMargin;
-    [SerializeField] private float randomPointMinimalDistance;
-    [SerializeField] private GameObject[] SystemPrefabs;    
+    [SerializeField] private float groundRandomPointMargin;
+    [SerializeField] private float randomPointMinimalDistance;      
 
     private GameObject playerGO;
     private float randomPointMinimalDistanceSqr;
-    private List<GameObject> QuestItemsPassivePool;
-    private List<GameObject> QuestItemsActivePool;
+    private List<GameObject> questItemsPassivePool;
+    private List<GameObject> questItemsActivePool;
     private List<Vector3> randomPointsList;
     private List<GameObject> instancedSystemPrefabs;
     private Vector3 groundPosition;
@@ -28,13 +28,16 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         instancedSystemPrefabs = new List<GameObject>();
+
         InstantiateSystemPrefabs();
+
         randomPointMinimalDistanceSqr = randomPointMinimalDistance * randomPointMinimalDistance;
         groundPosition = groundRenderer.gameObject.transform.position;
         groundExtentsX = groundRenderer.bounds.extents.x;
         groundExtentsZ = groundRenderer.bounds.extents.z;        
-        QuestItemsPassivePool = new List<GameObject>();
-        QuestItemsActivePool = new List<GameObject>();
+
+        questItemsPassivePool = new List<GameObject>();
+        questItemsActivePool = new List<GameObject>();
         randomPointsList = new List<Vector3>();
 
         InstantiatePrefabs();
@@ -44,25 +47,25 @@ public class GameManager : Singleton<GameManager>
     void InstantiateSystemPrefabs()
     {
         GameObject prefabInstance;
-        for (int i = 0; i < SystemPrefabs.Length; ++i)
+        for (int i = 0; i < systemPrefabs.Length; ++i)
         {
-            prefabInstance = Instantiate(SystemPrefabs[i]);
+            prefabInstance = Instantiate(systemPrefabs[i]);
             instancedSystemPrefabs.Add(prefabInstance);
         }
     }
 
     void InstantiatePrefabs()
     {
-        playerGO = Instantiate(PlayerPrefab);
+        playerGO = Instantiate(playerPrefab);
         playerGO.SetActive(false);        
 
-        for (int i = 0; i < QuestItemPrefabs.Length; i++)
+        for (int i = 0; i < questItemPrefabs.Length; i++)
         {
-            GameObject obj = (GameObject)Instantiate(QuestItemPrefabs[i]);
+            GameObject obj = (GameObject)Instantiate(questItemPrefabs[i]);
             QuestItemBaseClass questScript = obj.GetComponent<QuestItemBaseClass>();
             questScript.InstantiateParticles();
             obj.SetActive(false);
-            QuestItemsPassivePool.Add(obj);
+            questItemsPassivePool.Add(obj);
         }
     }
 
@@ -71,16 +74,16 @@ public class GameManager : Singleton<GameManager>
         playerGO.transform.position = FindRandomPoint();
         playerGO.SetActive(true);
         
-        for (int i = 0; i <= QuestItemsPassivePool.Count+1; i++)
+        for (int i = 0; i <= questItemsPassivePool.Count+1; i++)
         {
-            GameObject GO = QuestItemsPassivePool[Random.Range(0, QuestItemsPassivePool.Count)];
-            QuestItemsActivePool.Add(GO);
-            QuestItemsActivePool[i].transform.position = FindRandomPoint();
-            QuestItemsActivePool[i].transform.rotation = Quaternion.identity;
-            QuestItemsActivePool[i].SetActive(true);
-            QuestItemsActivePool[i].gameObject.GetComponent<QuestItemBaseClass>().OnActivated();            
+            GameObject GO = questItemsPassivePool[Random.Range(0, questItemsPassivePool.Count)];
+            questItemsActivePool.Add(GO);
+            questItemsActivePool[i].transform.position = FindRandomPoint();
+            questItemsActivePool[i].transform.rotation = Quaternion.identity;
+            questItemsActivePool[i].SetActive(true);
+            questItemsActivePool[i].gameObject.GetComponent<QuestItemBaseClass>().OnActivated();            
             
-            QuestItemsPassivePool.Remove(GO);            
+            questItemsPassivePool.Remove(GO);            
         } 
     }
 
@@ -89,14 +92,14 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.ResetUI();
         currentQuestItem = 0;
         randomPointsList.Clear();
-        for (int i = 0; i <= QuestItemsActivePool.Count+1; i++)
+        for (int i = 0; i <= questItemsActivePool.Count+1; i++)
         {            
-            GameObject GO = QuestItemsActivePool[0];
+            GameObject GO = questItemsActivePool[0];
             QuestItemBaseClass questItemBaseScript = GO.GetComponent<QuestItemBaseClass>();
             questItemBaseScript.StopAllParticles();
             questItemBaseScript.DeactivateQuestItem();
-            QuestItemsPassivePool.Add(GO);
-            QuestItemsActivePool.Remove(GO);                    
+            questItemsPassivePool.Add(GO);
+            questItemsActivePool.Remove(GO);                    
         }
     }
 
@@ -107,10 +110,10 @@ public class GameManager : Singleton<GameManager>
 
         while (!isValidRandomPoint)
         {
-            randomPoint = new Vector3(Random.Range(groundPosition.x - groundExtentsX + GroundRandomPointMargin,
-            groundPosition.x + groundExtentsX - GroundRandomPointMargin), 0.0f,
-            Random.Range(groundPosition.z - groundExtentsZ + GroundRandomPointMargin,
-            groundPosition.z + groundExtentsZ - GroundRandomPointMargin));
+            randomPoint = new Vector3(Random.Range(groundPosition.x - groundExtentsX + groundRandomPointMargin,
+            groundPosition.x + groundExtentsX - groundRandomPointMargin), 0.0f,
+            Random.Range(groundPosition.z - groundExtentsZ + groundRandomPointMargin,
+            groundPosition.z + groundExtentsZ - groundRandomPointMargin));
 
             if (randomPointsList.Count > 0)
             {                
@@ -143,12 +146,12 @@ public class GameManager : Singleton<GameManager>
     public void CheckQuestItem(GameObject questItem)
     {
         QuestItemBaseClass thisQuestBaseScript = questItem.GetComponent<QuestItemBaseClass>();        
-        if (questItem == QuestItemsActivePool[currentQuestItem])
+        if (questItem == questItemsActivePool[currentQuestItem])
         {
             thisQuestBaseScript.isActivatedQuestItem = true;
             thisQuestBaseScript.ActivateParticles(true, questItem.transform);
             currentQuestItem += 1;
-            if (currentQuestItem == QuestItemsActivePool.Count)
+            if (currentQuestItem == questItemsActivePool.Count)
             {
                 StartCoroutine(QuestFinished());
             }
@@ -157,9 +160,9 @@ public class GameManager : Singleton<GameManager>
         {
             if (!thisQuestBaseScript.isActivatedQuestItem)
             {
-                for (int i = 0; i < QuestItemsActivePool.Count; i++)
+                for (int i = 0; i < questItemsActivePool.Count; i++)
                 {
-                    QuestItemBaseClass questBaseScript = QuestItemsActivePool[i].GetComponent<QuestItemBaseClass>();
+                    QuestItemBaseClass questBaseScript = questItemsActivePool[i].GetComponent<QuestItemBaseClass>();
                     questBaseScript.StopAllParticles();
                     questBaseScript.DeactivateQuestItem();
                 }

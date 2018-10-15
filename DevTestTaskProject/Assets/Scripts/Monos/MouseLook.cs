@@ -40,8 +40,7 @@ namespace TPS
             {                
                 cameraTargetRot = ClampRotationAroundXAxis(cameraTargetRot);               
 
-            }
-                          
+            }                          
 
             if (smooth)
             {
@@ -108,7 +107,5 @@ namespace TPS
             q.x = Mathf.Tan(0.5f * Mathf.Deg2Rad * angleX);
             return q;
         }
-
-
     }
 }

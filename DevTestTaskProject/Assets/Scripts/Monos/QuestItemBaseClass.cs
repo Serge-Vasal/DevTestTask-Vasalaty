@@ -62,6 +62,4 @@ public class QuestItemBaseClass : MonoBehaviour
     {
         isActivatedQuestItem = false;
     }
-
-
 }

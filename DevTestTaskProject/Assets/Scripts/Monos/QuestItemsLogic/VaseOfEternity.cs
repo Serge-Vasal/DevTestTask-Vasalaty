@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-using TPS;
+﻿using UnityEngine;
 
 public class VaseOfEternity : QuestItemBaseClass
 {   

@@ -10,14 +10,9 @@ namespace TPS
     {      
         private Animator anim;
         
-        public Transform cam;
-        public Transform groundCheck;        
+        public Transform cam;            
         public MouseLook mouseLook = new MouseLook();
-        public bool swordActiveState=false;
-        
-        
-        private float m_YRotation;
-        private Vector3 m_GroundContactNormal;  
+        public bool swordActiveState=false;        
 
         void Start()
         {           

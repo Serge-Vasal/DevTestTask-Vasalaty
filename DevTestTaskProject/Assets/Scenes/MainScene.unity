@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -205,17 +205,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26ef3cb9ac480df4ca0986c2de716ab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  QuestItemPrefabs:
+  questItemPrefabs:
   - {fileID: 1977987471770190, guid: 11aa2315791f88241b032a95effe906a, type: 2}
-  - {fileID: 1863924664849700, guid: a98a6f1b894849f4892c09ca34f719f7, type: 2}
   - {fileID: 1957637034261896, guid: a7c9db63e7d5090458cc9802422b3d95, type: 2}
-  PlayerPrefab: {fileID: 1743488028740146, guid: c5d4efa025e7f4143a4a30dd1fab21ac,
+  - {fileID: 1863924664849700, guid: a98a6f1b894849f4892c09ca34f719f7, type: 2}
+  systemPrefabs:
+  - {fileID: 1289171466813848, guid: e44395de45b1e284b8501e0f59ce7151, type: 2}
+  playerPrefab: {fileID: 1743488028740146, guid: c5d4efa025e7f4143a4a30dd1fab21ac,
     type: 2}
   groundRenderer: {fileID: 435052837}
-  GroundRandomPointMargin: 50
+  groundRandomPointMargin: 40
   randomPointMinimalDistance: 10
-  SystemPrefabs:
-  - {fileID: 1289171466813848, guid: e44395de45b1e284b8501e0f59ce7151, type: 2}
   swordActive: 0
 --- !u!4 &251963611
 Transform:

@@ -9,8 +9,7 @@ public class ObeliskOfOrdinary : QuestItemBaseClass
     private bool isPlayerInside;
     private Transform playerTransform;
     private Quaternion playerStartRotation;
-    private Quaternion playerCurrentRotation;
-    private float currentAngle;
+    private Quaternion playerCurrentRotation;    
     private Vector3 obeliskToPlayerVector;
     private Vector3 obeliskPosition;
     private Vector3 rotationDeltaCurr;
@@ -42,7 +41,9 @@ public class ObeliskOfOrdinary : QuestItemBaseClass
         if (collider.gameObject.tag == "Player")
         {
             isPlayerInside = false;
+            isInNegativeZone = false;
             StopAllCoroutines();
+            Debug.Log("exited");
                         
         }
     }
@@ -65,8 +66,6 @@ public class ObeliskOfOrdinary : QuestItemBaseClass
                 isInNegativeZone = false;
             }
 
-
-
             if (isInNegativeZone)
             {
                 rotationDeltaFinal = rotationDeltaCurr.y - 360f;
@@ -74,7 +73,6 @@ public class ObeliskOfOrdinary : QuestItemBaseClass
             else
             {
                 rotationDeltaFinal = rotationDeltaCurr.y;
-
             }
 
 
@@ -105,7 +103,7 @@ public class ObeliskOfOrdinary : QuestItemBaseClass
                 ok270 = false;
             }
 
-            if(ok90 && ok90 && ok180 && ok270 && (Mathf.Abs(rotationDeltaFinal) > 355f))
+            if (ok90 && ok90 && ok180 && ok270 && (Mathf.Abs(rotationDeltaFinal) > 355f))
             {
                 StopAllCoroutines();
                 ok90 = false;
